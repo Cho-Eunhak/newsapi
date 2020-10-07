@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import NewsItem from './NewsItem';
 import axios from 'axios';
 import usePromise from '../lib/usePromise';
+
 
 const NewsListBlock = styled.div`
   box-sizing: border-box;
@@ -18,6 +19,7 @@ const NewsListBlock = styled.div`
 `;
 
 const NewsList = ({ category }) => {
+  const [state, usestate]= useState("");
   const [loading, response, error] = usePromise(() => {
     const query = category === 'all' ? '' : `&category=${category}`;
     return axios.get(
@@ -41,12 +43,29 @@ const NewsList = ({ category }) => {
 
   // response 값이 유효할 때
   const { articles } = response.data;
+  console.log(response.data)
+  
+  
+  const Example = (props) => {
+    usestate(articles[0].title)
+    console.log(state);
+  }
   return (
+    <div>
+    <button onClick={Example}></button>
     <NewsListBlock>
       {articles.map(article => (
         <NewsItem key={article.url} article={article} />
       ))}
     </NewsListBlock>
+    <ul>
+        {articles.map(article => (
+          <li key={article.title}>
+            {article.title} {article.publishedAt}
+          </li>
+        ))}
+        </ul>
+    </div>
   );
 };
 
